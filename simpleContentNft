@@ -12,7 +12,7 @@ import "./openzeppelin/Strings.sol";
 import "./openzeppelin/ERC165.sol";
 
 /**
- * @dev Implementation of a ERC721 NFT. This is based on Openzeppelin's ERC721 but some content data are added. 
+ * @dev Implementation of a ERC721 NFT. This is based on Openzeppelin's ERC721 but some content data are added.
  */
 contract simplecontentNft is Context, ERC165, IERC721, IERC721Metadata {
     using Address for address;
@@ -26,10 +26,10 @@ contract simplecontentNft is Context, ERC165, IERC721, IERC721Metadata {
 
     /*** Content-NFT DATA TYPES ***/
     struct ContentInformtaion {
-        string[] _productInfo; // product information of the content: text or URI
-        string[] _contractDocuments; // contract documents: text or URI
-        uint256[] _copyrightFeeRatio; // copyright fee ratio of NFT
-        bool _allowSecondaryMerket; // permission of secondary market sale :Just reference information
+        string[] _info; // product information of the content: text or URI
+        string[] _Documents; // contract documents: text or URI
+        uint256[] _Ratio; // copyright fee ratio of NFT
+        bool _allowSecondary; // permission of secondary market sale :Just reference information
     }
 
     // Mapping from token ID to content information
@@ -60,9 +60,9 @@ contract simplecontentNft is Context, ERC165, IERC721, IERC721Metadata {
      */
     function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165, IERC165) returns (bool) {
         return
-            interfaceId == type(IERC721).interfaceId ||
-            interfaceId == type(IERC721Metadata).interfaceId ||
-            super.supportsInterface(interfaceId);
+        interfaceId == type(IERC721).interfaceId ||
+        interfaceId == type(IERC721Metadata).interfaceId ||
+        super.supportsInterface(interfaceId);
     }
 
     /**
@@ -126,10 +126,10 @@ contract simplecontentNft is Context, ERC165, IERC721, IERC721Metadata {
         bool _asm
     ) {
 
-        string[] memory pi = _contents[tokenId]._productInfo;
-        string[] memory cds = _contents[tokenId]._contractDocuments;
-        uint256[] memory crfr = _contents[tokenId]._copyrightFeeRatio;
-        bool asm = _contents[tokenId]._allowSecondaryMerket;
+        string[] memory pi = _contents[tokenId]._info;
+        string[] memory cds = _contents[tokenId]._Documents;
+        uint256[] memory crfr = _contents[tokenId]._Ratio;
+        bool asm = _contents[tokenId]._allowSecondary;
         return(pi, cds, crfr, asm);
     }
 
@@ -265,14 +265,14 @@ contract simplecontentNft is Context, ERC165, IERC721, IERC721Metadata {
 
 
     function Mint(
-        address to, 
+        address to,
         uint256 tokenId,
-        string[] memory productInfo,
-        string[] memory contractDocuments,
-        uint256[] memory copyrightFeeRatio,
-        bool allowSecondaryMerket
+        string[] memory info,
+        string[] memory Documents,
+        uint256[] memory Ratio,
+        bool allowSecondary
     ) public virtual {
-        _safeMint(to, tokenId, "", productInfo, contractDocuments, copyrightFeeRatio, allowSecondaryMerket);
+        _safeMint(to, tokenId, "", info, Documents, Ratio, allowSecondary);
     }
 
     /**
@@ -283,12 +283,12 @@ contract simplecontentNft is Context, ERC165, IERC721, IERC721Metadata {
         address to,
         uint256 tokenId,
         bytes memory _data,
-        string[] memory productInfo,
-        string[] memory contractDocuments,
-        uint256[] memory copyrightFeeRatio,
-        bool allowSecondaryMerket
+        string[] memory info,
+        string[] memory Documents,
+        uint256[] memory Ratio,
+        bool allowSecondary
     ) internal virtual {
-        _mint(to, tokenId, productInfo, contractDocuments, copyrightFeeRatio, allowSecondaryMerket);
+        _mint(to, tokenId, info, Documents, Ratio, allowSecondary);
         require(
             _checkOnERC721Received(address(0), to, tokenId, _data),
             "ERC721: transfer to non ERC721Receiver implementer"
@@ -308,13 +308,13 @@ contract simplecontentNft is Context, ERC165, IERC721, IERC721Metadata {
      * Emits a {Transfer} event.
      */
     function _mint(
-        address to, 
-        uint256 tokenId, 
-        string[] memory productInfo,
-        string[] memory contractDocuments,
-        uint256[] memory copyrightFeeRatio,
-        bool allowSecondaryMerket
-        ) internal virtual {
+        address to,
+        uint256 tokenId,
+        string[] memory info,
+        string[] memory Documents,
+        uint256[] memory Ratio,
+        bool allowSecondary
+    ) internal virtual {
         require(to != address(0), "ERC721: mint to the zero address");
         require(!_exists(tokenId), "ERC721: token already minted");
 
@@ -324,10 +324,10 @@ contract simplecontentNft is Context, ERC165, IERC721, IERC721Metadata {
         _owners[tokenId] = to;
 
         ContentInformtaion memory cInfo = ContentInformtaion({
-            _productInfo: productInfo,
-            _contractDocuments: contractDocuments,
-            _copyrightFeeRatio: copyrightFeeRatio,
-            _allowSecondaryMerket: allowSecondaryMerket
+        _info: info,
+        _Documents: Documents,
+        _Ratio: Ratio,
+        _allowSecondary: allowSecondary
         });
 
         _contents[tokenId] = cInfo;
