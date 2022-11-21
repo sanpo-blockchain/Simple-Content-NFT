@@ -27,8 +27,8 @@ contract simplecontentNft is Context, ERC165, IERC721, IERC721Metadata {
     /*** Content-NFT DATA TYPES ***/
     struct ContentInformtaion {
         string[] _info; // product information of the content: text or URI
-        string[] _Documents; // contract documents: text or URI
-        uint256[] _Ratio; // copyright fee ratio of NFT
+        string[] _documents; // contract documents: text or URI
+        uint256[] _ratio; // copyright fee ratio of NFT
         bool _allowSecondary; // permission of secondary market sale :Just reference information
     }
 
@@ -120,17 +120,17 @@ contract simplecontentNft is Context, ERC165, IERC721, IERC721Metadata {
      * @dev ContentNFT original fuction to get content inforamation.
      */
     function content(uint256 tokenId)  public view returns (
-        string[] memory _pi,
-        string[] memory _cds,
-        uint256[] memory _crfr,
-        bool _asm
+        string[] memory _info,
+        string[] memory _documents,
+        uint256[] memory _ratio,
+        bool _allowSecondary
     ) {
 
-        string[] memory pi = _contents[tokenId]._info;
-        string[] memory cds = _contents[tokenId]._Documents;
-        uint256[] memory crfr = _contents[tokenId]._Ratio;
-        bool asm = _contents[tokenId]._allowSecondary;
-        return(pi, cds, crfr, asm);
+        string[] memory info = _contents[tokenId]._info;
+        string[] memory documents = _contents[tokenId]._documents;
+        uint256[] memory ratio = _contents[tokenId]._ratio;
+        bool allowSecondary = _contents[tokenId]._allowSecondary;
+        return(info, documents, ratio, allowSecondary);
     }
 
 
@@ -325,8 +325,8 @@ contract simplecontentNft is Context, ERC165, IERC721, IERC721Metadata {
 
         ContentInformtaion memory cInfo = ContentInformtaion({
         _info: info,
-        _Documents: Documents,
-        _Ratio: Ratio,
+        _documents: Documents,
+        _ratio: Ratio,
         _allowSecondary: allowSecondary
         });
 
